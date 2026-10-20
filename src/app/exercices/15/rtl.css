@@ -1,0 +1,8 @@
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+.rtl th,
+.rtl td {
+  text-align: right;
+}
