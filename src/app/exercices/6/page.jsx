@@ -1,11 +1,16 @@
 "use client";
 
+import { useState } from "react";
+
 import "./styles.css";
 
 export default function Exo6({ characterLimit = 20 }) {
-  const inputValue = "";
+  const [inputValue, setInputValue] = useState("");
+  const result = characterLimit - inputValue.length;
 
-  const handleChange = (e) => {};
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,6 +19,11 @@ export default function Exo6({ characterLimit = 20 }) {
     // alert "The input exceeds the character limit. Please shorten your text."
     // else
     // alert "Thanks for your submission"
+    if (result <= 0) {
+      alert("The input exceeds the character limit. Please shorten your text.");
+    } else {
+      alert("Thanks for your submission");
+    }
   };
 
   return (
@@ -34,10 +44,13 @@ export default function Exo6({ characterLimit = 20 }) {
           </li>
         </ul>
       </div>
+      {/* DRY - Don't Repeat Yourself */}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="limited-text-input">Limited Text Input:</label>
-          <span className="no-error">Characters remaining: TODO</span>
+          <span className={result > 0 ? "no-error" : "error"}>
+            Characters remaining: {result}
+          </span>
         </div>
         <input
           type="text"
