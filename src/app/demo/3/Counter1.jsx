@@ -2,7 +2,7 @@
 
 import { useReducer, useState } from "react";
 
-export default function CounterState() {
+export function CounterState() {
   const [count, setCount] = useState(0);
 
   const handleIncrement = () => setCount(count + 1);

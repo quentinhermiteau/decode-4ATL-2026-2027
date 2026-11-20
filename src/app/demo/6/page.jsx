@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Wave from "./Wave";
 
 export default function Page() {
   const [languageIndex, setLanguageIndex] = useState(0);
   const [nameIndex, setNameIndex] = useState(0);
+  const options = useMemo(
+    () => ({ toneIndex: languageIndex }),
+    [languageIndex],
+  );
 
   const languages = ["Hello", "Hola", "Bonjour", "Hallo", "Привет"];
   const names = ["Quentin", "Robin", "Aurelien", "Ilyam", "Liam"];
@@ -28,7 +32,7 @@ export default function Page() {
       </h1>
       <button onClick={handleNextLanguageClick}>Next language</button>
       <button onClick={handleNextNameClick}>Next name</button>
-      <Wave />
+      <Wave options={options} />
     </main>
   );
 }

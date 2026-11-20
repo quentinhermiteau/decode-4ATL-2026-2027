@@ -15,22 +15,30 @@ export default function Page() {
    * Montrer l'intérêt de la cleanup function avec un handleEventListener
    */
   useEffect(() => {
+    let ignore = false;
+
     const handleFetchTodo = async () => {
       setLoading(true);
       setTimeout(async () => {
         const { error, response } = await fetch(
-          `https://jsonplaceholder.typicode.com/todos/${id}`
+          `https://jsonplaceholder.typicode.com/todos/${id}`,
         )
           .then((response) => response.json())
           .then((response) => ({ response }))
           .catch((error) => ({ error }));
 
-        setTodo(response);
-        setLoading(false);
+        if (!ignore) {
+          setTodo(response);
+          setLoading(false);
+        }
       }, 500);
     };
 
     handleFetchTodo();
+
+    return () => {
+      ignore = true;
+    };
   }, [id]);
 
   return (
