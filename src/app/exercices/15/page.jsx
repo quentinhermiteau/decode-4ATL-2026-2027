@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-// import { fetchData } from "./utils";
+import { useEffect, useMemo, useState } from "react";
 import "./rtl.css";
+import { fetchData } from "./utils";
 
 export default function DataTable() {
   const [data, setData] = useState([]);
@@ -10,6 +10,10 @@ export default function DataTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState("id");
   const [sortOrder, setSortOrder] = useState("asc");
+
+  useEffect(() => {
+    fetchData().then((res) => setData(res));
+  }, []);
 
   const handleHeaderClick = (column) => {
     if (column === sortColumn) {
@@ -24,9 +28,25 @@ export default function DataTable() {
     setIsRTL((prev) => !prev);
   };
 
-  const filteredData = [...data];
+  const filteredData = useMemo(
+    () => data.filter((item) => item.name.includes(searchTerm.toLowerCase())),
+    [data, searchTerm],
+  );
 
-  const sortedData = [...filteredData];
+  const sortedData = useMemo(() => {
+    const direction = sortOrder === "asc" ? 1 : -1;
+
+    return [...filteredData].sort((a, b) => {
+      const valueA = a[sortColumn];
+      const valueB = b[sortColumn];
+
+      if (typeof valueA === "string") {
+        return valueA.localeCompare(valueB) * direction;
+      }
+
+      return (valueA - valueB) * direction;
+    });
+  }, [filteredData, sortColumn, sortOrder]);
 
   return (
     <div>
