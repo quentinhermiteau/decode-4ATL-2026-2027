@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo, useState } from "react";
+
 const translations = {
   en: "The {{count}} prime number is {{value}}.",
   fr: "Le {{count}} nombre premier est {{value}}.",
@@ -30,13 +32,13 @@ function calculatePrime(n) {
 }
 
 export default function LocalizedPrimeNumbers() {
-  const count = 1;
-  const locale = "en";
+  const [count, setCount] = useState(1);
+  const [locale, setLocale] = useState("en");
 
-  const handleClick = () => {};
-  const handleLocaleChange = () => {};
+  const handleClick = () => setCount(count + 1);
+  const handleLocaleChange = (e) => setLocale(e.target.value);
 
-  const nthprime = calculatePrime(count);
+  const nthprime = useMemo(() => calculatePrime(count), [count]);
 
   return (
     <div>
